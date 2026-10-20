@@ -86,9 +86,20 @@ export function CardFace({
   const textOffsetX = side === 'front' ? frontTextOffsetX : backTextOffsetX
   const textOffsetY = side === 'front' ? frontTextOffsetY : backTextOffsetY
 
-  // Photo frame dimensions
-  const photoW = h * 0.38 * (7 / 9)
-  const photoH = h * 0.44
+  // Aspect-ratio adaptive: use smaller dimension as scaling base
+  const baseSize = Math.min(w, h)
+  const isVertical = h > w
+  const isSquare = w === h
+
+  // Photo frame dimensions - scale based on baseSize
+  const photoW = baseSize * 0.26
+  const photoH = baseSize * 0.34
+
+  // QR code size - constrained to fit
+  const qrSize = isVertical ? w * 0.40 : baseSize * 0.40
+
+  // Font scale factor
+  const fs = baseSize
 
   // Date formatting (DD/MM/YYYY)
   const formattedDob = cardData.dob
@@ -126,11 +137,11 @@ export function CardFace({
 
       {side === 'front' ? (
         /* ======================== FRONT SIDE ======================== */
-        <div className="flex-1 flex flex-col justify-between px-6 py-2 relative z-10">
+        <div className="flex-1 flex flex-col justify-between px-4 py-2 relative z-10 overflow-hidden">
           {/* Header Banner: Tricolor Brush with Bilingual Authority Title */}
-          <div className="flex items-center justify-between border-b border-slate-200 pb-2">
+          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 shrink-0">
             {/* Left Civic Crest / Logo */}
-            <div className="w-14 h-14 flex items-center justify-center shrink-0">
+            <div style={{ width: `${fs * 0.08}px`, height: `${fs * 0.08}px` }} className="flex items-center justify-center shrink-0">
               {cardData.logo ? (
                 <img
                   src={cardData.logo}
@@ -138,8 +149,8 @@ export function CardFace({
                   className="max-h-full max-w-full object-contain"
                 />
               ) : (
-                <div className="w-12 h-12 rounded-full border-2 border-amber-600/60 bg-amber-50 flex items-center justify-center">
-                  <div className="w-8 h-8 rounded-full border border-amber-500 flex items-center justify-center text-amber-700 font-bold text-xs">
+                <div className="w-full h-full rounded-full border-2 border-amber-600/60 bg-amber-50 flex items-center justify-center">
+                  <div className="w-3/4 h-3/4 rounded-full border border-amber-500 flex items-center justify-center text-amber-700 font-bold" style={{ fontSize: `${fs * 0.018}px` }}>
                     सत्य
                   </div>
                 </div>
@@ -147,15 +158,15 @@ export function CardFace({
             </div>
 
             {/* Center: Tricolor Brush Effect & Bilingual Authority */}
-            <div className="flex-1 mx-4 text-center py-1 rounded-lg relative overflow-hidden bg-gradient-to-r from-orange-100/70 via-white to-emerald-100/70 border border-slate-200">
+            <div className="flex-1 mx-2 text-center py-1 rounded-lg relative overflow-hidden bg-gradient-to-r from-orange-100/70 via-white to-emerald-100/70 border border-slate-200">
               <div
-                style={{ fontSize: `${h * 0.042}px` }}
+                style={{ fontSize: `${fs * 0.038}px` }}
                 className="font-bold text-slate-900 leading-tight font-devanagari"
               >
                 {cardData.orgNameHi || 'सार्वजनिक नागरिक सेवा'}
               </div>
               <div
-                style={{ fontSize: `${h * 0.034}px` }}
+                style={{ fontSize: `${fs * 0.030}px` }}
                 className="font-semibold text-slate-800 tracking-wide"
               >
                 {cardData.orgNameEn || 'Civic Identity Authority (Fictional)'}
@@ -163,27 +174,29 @@ export function CardFace({
             </div>
 
             {/* Right Side Emblem / Logo */}
-            <div className="w-14 h-14 flex items-center justify-center shrink-0">
-              <div className="w-11 h-11 rounded-full bg-red-50 border border-red-300 flex flex-col items-center justify-center p-0.5">
+            <div style={{ width: `${fs * 0.08}px`, height: `${fs * 0.08}px` }} className="flex items-center justify-center shrink-0">
+              <div className="w-full h-full rounded-full bg-red-50 border border-red-300 flex flex-col items-center justify-center p-0.5">
                 <div className="w-6 h-4 bg-gradient-to-b from-orange-500 via-white to-emerald-600 rounded-sm mb-0.5" />
-                <span className="text-[9px] font-bold text-red-600 font-devanagari">पहचान</span>
+                <span style={{ fontSize: `${fs * 0.014}px` }} className="font-bold text-red-600 font-devanagari">पहचान</span>
               </div>
             </div>
           </div>
 
-          {/* Front Body: Photo on Left, Details & Notice Box on Right */}
+          {/* Front Body: Photo + Details — stacks vertically for portrait cards */}
           <div
-            className="flex items-start gap-5 my-auto"
+            className={`${isVertical ? 'flex flex-col items-center gap-3' : 'flex items-start gap-4'} my-auto`}
             style={{ transform: `translate(${textOffsetX}px, ${textOffsetY}px)` }}
           >
-            {/* Left: Issue Date (Vertical) + Passport Photo */}
-            <div className="flex items-center gap-2 shrink-0">
-              <div
-                style={{ fontSize: `${h * 0.024}px` }}
-                className="font-mono text-slate-700 -rotate-90 whitespace-nowrap origin-center tracking-wider font-semibold select-none py-1"
-              >
-                Issued: {cardData.issueDate || '01/03/2015'}
-              </div>
+            {/* Photo Section */}
+            <div className={`flex ${isVertical ? 'flex-col items-center' : 'items-center'} gap-2 shrink-0`}>
+              {!isVertical && (
+                <div
+                  style={{ fontSize: `${fs * 0.020}px` }}
+                  className="font-mono text-slate-700 -rotate-90 whitespace-nowrap origin-center tracking-wider font-semibold select-none py-1"
+                >
+                  Issued: {cardData.issueDate || '01/03/2015'}
+                </div>
+              )}
 
               <div
                 style={{
@@ -202,25 +215,34 @@ export function CardFace({
                     }}
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                  <div className="w-full h-full flex items-center justify-center text-slate-400" style={{ fontSize: `${fs * 0.018}px` }}>
                     No Photo
                   </div>
                 )}
               </div>
+
+              {isVertical && (
+                <div
+                  style={{ fontSize: `${fs * 0.020}px` }}
+                  className="font-mono text-slate-700 whitespace-nowrap tracking-wider font-semibold select-none"
+                >
+                  Issued: {cardData.issueDate || '01/03/2015'}
+                </div>
+              )}
             </div>
 
-            {/* Right: Personal Details & Guidance Notice Box */}
-            <div className="flex-1 space-y-2.5">
+            {/* Personal Details & Guidance Notice Box */}
+            <div className={`flex-1 ${isVertical ? 'w-full space-y-1.5' : 'space-y-2'}`}>
               {/* Name in Hindi and English */}
               <div>
                 <div
-                  style={{ fontSize: `${h * 0.046}px` }}
+                  style={{ fontSize: `${fs * 0.042}px` }}
                   className="font-bold text-slate-950 font-devanagari leading-snug"
                 >
                   {cardData.fullNameHi || 'मंगेश सहानी'}
                 </div>
                 <div
-                  style={{ fontSize: `${h * 0.040}px` }}
+                  style={{ fontSize: `${fs * 0.036}px` }}
                   className="font-semibold text-slate-900 leading-snug"
                 >
                   {cardData.fullName || 'Mangesh Sahani'}
@@ -230,13 +252,13 @@ export function CardFace({
               {/* DOB & Gender */}
               <div className="space-y-0.5">
                 <div
-                  style={{ fontSize: `${h * 0.035}px` }}
+                  style={{ fontSize: `${fs * 0.030}px` }}
                   className="font-semibold text-slate-900"
                 >
                   जन्म तिथि / DOB: <span className="font-bold">{formattedDob}</span>
                 </div>
                 <div
-                  style={{ fontSize: `${h * 0.035}px` }}
+                  style={{ fontSize: `${fs * 0.030}px` }}
                   className="font-semibold text-slate-900"
                 >
                   लिंग / Gender: <span className="font-bold">{formattedGender}</span>
@@ -244,16 +266,16 @@ export function CardFace({
               </div>
 
               {/* Red-Bordered Official-Style Guidance Notice Box */}
-              <div className="border border-red-700 rounded p-2 bg-red-50/20 space-y-1">
+              <div className="border border-red-700 rounded p-1.5 bg-red-50/20 space-y-0.5">
                 <p
-                  style={{ fontSize: `${h * 0.024}px` }}
+                  style={{ fontSize: `${fs * 0.020}px` }}
                   className="font-bold text-slate-900 font-devanagari leading-relaxed"
                 >
                   {cardData.noticeTextHi ||
                     'पहचान का प्रमाण है, नागरिकता या जन्मतिथि का नहीं। इसका उपयोग सत्यापन (ऑनलाइन प्रमाणीकरण या क्यूआर कोड स्कैनिंग) के साथ किया जाना चाहिए।'}
                 </p>
                 <p
-                  style={{ fontSize: `${h * 0.022}px` }}
+                  style={{ fontSize: `${fs * 0.018}px` }}
                   className="font-medium text-slate-800 leading-relaxed"
                 >
                   {cardData.noticeTextEn ||
@@ -264,19 +286,19 @@ export function CardFace({
           </div>
 
           {/* Front Bottom: 12-Digit Card ID & Bilingual Slogan */}
-          <div className="pt-2 border-t border-slate-200">
+          <div className="pt-1.5 border-t border-slate-200 shrink-0">
             {/* 12-Digit Bold Card ID Number */}
             <div
-              style={{ fontSize: `${h * 0.066}px`, letterSpacing: '0.18em' }}
+              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em' }}
               className="font-black text-center text-slate-950 leading-none select-all"
             >
               {cardData.cardReferenceNumber || '2078 9828 8141'}
             </div>
 
             {/* Red Divider & Slogan */}
-            <div className="mt-2 pt-1 border-t-2 border-red-600 flex items-center justify-center">
+            <div className="mt-1.5 pt-1 border-t-2 border-red-600 flex items-center justify-center">
               <span
-                style={{ fontSize: `${h * 0.036}px` }}
+                style={{ fontSize: `${fs * 0.032}px` }}
                 className="font-black tracking-wider text-slate-900 font-devanagari text-center"
               >
                 {cardData.slogan || 'मेरा कार्ड, मेरी पहचान'}
@@ -286,33 +308,33 @@ export function CardFace({
         </div>
       ) : (
         /* ======================== BACK SIDE ======================== */
-        <div className="flex-1 flex flex-col justify-between px-6 py-2 relative z-10">
+        <div className="flex-1 flex flex-col justify-between px-4 py-2 relative z-10 overflow-hidden">
           {/* Top Enrolment Header */}
-          <div className="border-b border-slate-200 pb-1.5 flex items-center justify-between">
+          <div className="border-b border-slate-200 pb-1 flex items-center justify-between shrink-0">
             <div
-              style={{ fontSize: `${h * 0.034}px` }}
+              style={{ fontSize: `${fs * 0.028}px` }}
               className="font-bold text-slate-900 font-mono tracking-tight"
             >
               नामांकन क्रम / Enrolment No.:{' '}
               <span className="font-extrabold">{cardData.enrolmentNo || '2906/48436/00676'}</span>
             </div>
             <span
-              style={{ fontSize: `${h * 0.024}px` }}
+              style={{ fontSize: `${fs * 0.020}px` }}
               className="text-slate-500 font-mono"
             >
               BACK SIDE
             </span>
           </div>
 
-          {/* Back Body: Left Address Details & Right Large QR Code */}
+          {/* Back Body: Address Details & QR Code — stacks vertically for portrait cards */}
           <div
-            className="flex items-start justify-between gap-6 my-auto"
+            className={`${isVertical ? 'flex flex-col items-center gap-3' : 'flex items-start justify-between gap-4'} my-auto`}
             style={{ transform: `translate(${textOffsetX}px, ${textOffsetY}px)` }}
           >
-            {/* Left Address Breakdown Column */}
-            <div className="flex-1 space-y-1.5">
+            {/* Address Breakdown Column */}
+            <div className={`${isVertical ? 'w-full' : 'flex-1'} space-y-1`}>
               <div
-                style={{ fontSize: `${h * 0.030}px` }}
+                style={{ fontSize: `${fs * 0.026}px` }}
                 className="font-bold text-slate-800"
               >
                 To
@@ -321,13 +343,13 @@ export function CardFace({
               {/* Recipient Name in Hindi and English */}
               <div className="space-y-0.5">
                 <div
-                  style={{ fontSize: `${h * 0.036}px` }}
+                  style={{ fontSize: `${fs * 0.032}px` }}
                   className="font-bold text-slate-950 font-devanagari"
                 >
                   {cardData.fullNameHi || 'मंगेश सहानी'}
                 </div>
                 <div
-                  style={{ fontSize: `${h * 0.034}px` }}
+                  style={{ fontSize: `${fs * 0.030}px` }}
                   className="font-semibold text-slate-900"
                 >
                   {cardData.fullName || 'Mangesh Sahani'}
@@ -336,7 +358,7 @@ export function CardFace({
 
               {/* Detailed Breakdown Rows */}
               <div
-                style={{ fontSize: `${h * 0.030}px`, lineHeight: 1.45 }}
+                style={{ fontSize: `${fs * 0.026}px`, lineHeight: 1.4 }}
                 className="font-medium text-slate-900 space-y-0.5"
               >
                 <div>
@@ -368,28 +390,28 @@ export function CardFace({
               </div>
             </div>
 
-            {/* Right: Large Scannable QR Code */}
+            {/* QR Code */}
             <div className="shrink-0 flex flex-col items-center justify-center p-2 bg-white border border-slate-300 rounded-lg shadow-sm">
               {qrCodeUrl ? (
                 <img
                   src={qrCodeUrl}
                   alt="Scannable QR"
                   style={{
-                    width: `${h * 0.44}px`,
-                    height: `${h * 0.44}px`
+                    width: `${qrSize}px`,
+                    height: `${qrSize}px`
                   }}
                   className="object-contain"
                 />
               ) : (
                 <div
-                  style={{ width: `${h * 0.44}px`, height: `${h * 0.44}px` }}
+                  style={{ width: `${qrSize}px`, height: `${qrSize}px` }}
                   className="flex items-center justify-center text-xs text-slate-400"
                 >
                   QR Code
                 </div>
               )}
               <span
-                style={{ fontSize: `${h * 0.020}px` }}
+                style={{ fontSize: `${fs * 0.018}px` }}
                 className="text-slate-500 font-mono mt-1"
               >
                 VERIFICATION QR
@@ -398,17 +420,17 @@ export function CardFace({
           </div>
 
           {/* Back Bottom: 12-Digit Card ID, VID, and Slogan */}
-          <div className="pt-2 border-t border-slate-200">
+          <div className="pt-1.5 border-t border-slate-200 shrink-0">
             <div
-              style={{ fontSize: `${h * 0.034}px` }}
-              className="text-center font-bold text-slate-900 font-devanagari mb-1"
+              style={{ fontSize: `${fs * 0.028}px` }}
+              className="text-center font-bold text-slate-900 font-devanagari mb-0.5"
             >
               आपका पहचान क्रमांक / Your ID No. :
             </div>
 
             {/* 12-Digit Bold Card ID */}
             <div
-              style={{ fontSize: `${h * 0.066}px`, letterSpacing: '0.18em' }}
+              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em' }}
               className="font-black text-center text-slate-950 leading-none select-all"
             >
               {cardData.cardReferenceNumber || '2078 9828 8141'}
@@ -416,16 +438,16 @@ export function CardFace({
 
             {/* Virtual ID (VID) */}
             <div
-              style={{ fontSize: `${h * 0.028}px`, letterSpacing: '0.12em' }}
-              className="text-center font-mono font-bold text-slate-700 mt-1 select-all"
+              style={{ fontSize: `${fs * 0.024}px`, letterSpacing: '0.10em' }}
+              className="text-center font-mono font-bold text-slate-700 mt-0.5 select-all"
             >
               VID : {cardData.vid || '9143 4320 2353 4672'}
             </div>
 
             {/* Red Divider & Slogan */}
-            <div className="mt-1.5 pt-1 border-t-2 border-red-600 flex items-center justify-center">
+            <div className="mt-1 pt-1 border-t-2 border-red-600 flex items-center justify-center">
               <span
-                style={{ fontSize: `${h * 0.036}px` }}
+                style={{ fontSize: `${fs * 0.032}px` }}
                 className="font-black tracking-wider text-slate-900 font-devanagari text-center"
               >
                 {cardData.slogan || 'मेरा कार्ड, मेरी पहचान'}
