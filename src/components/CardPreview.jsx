@@ -74,11 +74,17 @@ export function CardFace({
     borderRadius = 12,
     font = '"Noto Sans Devanagari", Inter, Roboto, Arial, sans-serif',
     watermarkText = 'SAMPLE — NOT VALID ID',
-    watermarkOpacity = 0.16,
+    watermarkOpacity = 0.32,
     watermarkColor = '#dc2626',
-    textOffsetX = 0,
-    textOffsetY = 0
+    frontTextOffsetX = 0,
+    frontTextOffsetY = 0,
+    backTextOffsetX = 0,
+    backTextOffsetY = 0
   } = styling
+
+  // Pick the correct offset based on which side we're rendering
+  const textOffsetX = side === 'front' ? frontTextOffsetX : backTextOffsetX
+  const textOffsetY = side === 'front' ? frontTextOffsetY : backTextOffsetY
 
   // Photo frame dimensions
   const photoW = h * 0.38 * (7 / 9)

@@ -320,16 +320,17 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
         </div>
       </div>
 
-      {/* Drag & Field Position Offset Controls */}
+      {/* Front Side Position Offset Controls */}
       <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-2.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block">
-            Content Positioning
+          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span>
+            Front Side Position (पहला वाला)
           </label>
           <button
             onClick={() => {
-              updateStyle('textOffsetX', 0)
-              updateStyle('textOffsetY', 0)
+              updateStyle('frontTextOffsetX', 0)
+              updateStyle('frontTextOffsetY', 0)
             }}
             className="text-[10px] text-indigo-400 hover:underline"
           >
@@ -340,30 +341,81 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
         <div className="grid grid-cols-2 gap-3">
           <div>
             <span className="block text-[11px] text-slate-400 mb-1">
-              Horizontal Offset: {cardStyling.textOffsetX || 0}px
+              Horizontal: {cardStyling.frontTextOffsetX || 0}px
             </span>
             <input
               type="range"
               min="-60"
               max="60"
               step="2"
-              value={cardStyling.textOffsetX || 0}
-              onChange={(e) => updateStyle('textOffsetX', parseInt(e.target.value))}
+              value={cardStyling.frontTextOffsetX || 0}
+              onChange={(e) => updateStyle('frontTextOffsetX', parseInt(e.target.value))}
               className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer"
             />
           </div>
 
           <div>
             <span className="block text-[11px] text-slate-400 mb-1">
-              Vertical Offset: {cardStyling.textOffsetY || 0}px
+              Vertical: {cardStyling.frontTextOffsetY || 0}px
             </span>
             <input
               type="range"
               min="-40"
               max="40"
               step="2"
-              value={cardStyling.textOffsetY || 0}
-              onChange={(e) => updateStyle('textOffsetY', parseInt(e.target.value))}
+              value={cardStyling.frontTextOffsetY || 0}
+              onChange={(e) => updateStyle('frontTextOffsetY', parseInt(e.target.value))}
+              className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Back Side Position Offset Controls */}
+      <div className="bg-slate-950/60 p-3.5 rounded-xl border border-slate-800 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-indigo-400 inline-block"></span>
+            Back Side Position (दूसरा वाला)
+          </label>
+          <button
+            onClick={() => {
+              updateStyle('backTextOffsetX', 0)
+              updateStyle('backTextOffsetY', 0)
+            }}
+            className="text-[10px] text-indigo-400 hover:underline"
+          >
+            Center
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <span className="block text-[11px] text-slate-400 mb-1">
+              Horizontal: {cardStyling.backTextOffsetX || 0}px
+            </span>
+            <input
+              type="range"
+              min="-60"
+              max="60"
+              step="2"
+              value={cardStyling.backTextOffsetX || 0}
+              onChange={(e) => updateStyle('backTextOffsetX', parseInt(e.target.value))}
+              className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer"
+            />
+          </div>
+
+          <div>
+            <span className="block text-[11px] text-slate-400 mb-1">
+              Vertical: {cardStyling.backTextOffsetY || 0}px
+            </span>
+            <input
+              type="range"
+              min="-40"
+              max="40"
+              step="2"
+              value={cardStyling.backTextOffsetY || 0}
+              onChange={(e) => updateStyle('backTextOffsetY', parseInt(e.target.value))}
               className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer"
             />
           </div>
@@ -377,7 +429,7 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
             Custom Watermark (वाटरमार्क)
           </label>
           <span className="text-[10px] text-slate-400">
-            {cardStyling.watermarkOpacity === 0 ? 'Hidden / बन्द' : `${Math.round((cardStyling.watermarkOpacity ?? 0.16) * 100)}% Opacity`}
+            {cardStyling.watermarkOpacity === 0 ? 'Hidden / बन्द' : `${Math.round((cardStyling.watermarkOpacity ?? 0.32) * 100)}% Opacity`}
           </span>
         </div>
 
@@ -404,8 +456,8 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
                 key={preset}
                 onClick={() => {
                   updateStyle('watermarkText', preset)
-                  if ((cardStyling.watermarkOpacity ?? 0.16) === 0) {
-                    updateStyle('watermarkOpacity', 0.16)
+                  if ((cardStyling.watermarkOpacity ?? 0.32) === 0) {
+                    updateStyle('watermarkOpacity', 0.32)
                   }
                 }}
                 className="text-[10px] px-2 py-0.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 border border-slate-700 transition"
@@ -429,7 +481,7 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
         {/* Opacity Slider (0 to 0.40) */}
         <div>
           <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
-            <span>Visibility / Opacity: {Math.round((cardStyling.watermarkOpacity ?? 0.16) * 100)}%</span>
+            <span>Visibility / Opacity: {Math.round((cardStyling.watermarkOpacity ?? 0.32) * 100)}%</span>
             <span className="text-[10px] text-slate-500">(0% = Completely Hidden)</span>
           </div>
           <input
@@ -437,7 +489,7 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
             min="0"
             max="0.40"
             step="0.02"
-            value={cardStyling.watermarkOpacity ?? 0.16}
+            value={cardStyling.watermarkOpacity ?? 0.32}
             onChange={(e) => updateStyle('watermarkOpacity', parseFloat(e.target.value))}
             className="w-full h-1 bg-slate-800 rounded appearance-none cursor-pointer"
           />

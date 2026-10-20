@@ -30,12 +30,14 @@ const DEFAULT_STYLING = {
   shape: 'rect',
   headerAlign: 'center',
   headerHeight: 90,
-  watermarkOpacity: 0.16,
+  watermarkOpacity: 0.32,
   photoZoom: 1,
   photoPanX: 0,
   photoPanY: 0,
-  textOffsetX: 0,
-  textOffsetY: 0
+  frontTextOffsetX: 0,
+  frontTextOffsetY: 0,
+  backTextOffsetX: 0,
+  backTextOffsetY: 0
 }
 
 export default function App() {
