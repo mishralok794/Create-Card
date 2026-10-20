@@ -73,6 +73,8 @@ export function CardFace({
     bw = 2,
     borderRadius = 12,
     font = '"Noto Sans Devanagari", Inter, Roboto, Arial, sans-serif',
+    fontHindi = '"Noto Sans Devanagari", "Tiro Devanagari Hindi", Mangal, sans-serif',
+    fontEnglish = '"Times New Roman", Georgia, "Roboto Slab", serif',
     watermarkText = 'SAMPLE — NOT VALID ID',
     watermarkOpacity = 0.32,
     watermarkColor = '#dc2626',
@@ -150,7 +152,7 @@ export function CardFace({
                 />
               ) : (
                 <div className="w-full h-full rounded-full border-2 border-amber-600/60 bg-amber-50 flex items-center justify-center">
-                  <div className="w-3/4 h-3/4 rounded-full border border-amber-500 flex items-center justify-center text-amber-700 font-bold" style={{ fontSize: `${fs * 0.018}px` }}>
+                  <div className="w-3/4 h-3/4 rounded-full border border-amber-500 flex items-center justify-center text-amber-700 font-bold" style={{ fontSize: `${fs * 0.018}px`, fontFamily: fontHindi }}>
                     सत्य
                   </div>
                 </div>
@@ -160,13 +162,13 @@ export function CardFace({
             {/* Center: Tricolor Brush Effect & Bilingual Authority */}
             <div className="flex-1 mx-2 text-center py-1 rounded-lg relative overflow-hidden bg-gradient-to-r from-orange-100/70 via-white to-emerald-100/70 border border-slate-200">
               <div
-                style={{ fontSize: `${fs * 0.038}px` }}
-                className="font-bold text-slate-900 leading-tight font-devanagari"
+                style={{ fontSize: `${fs * 0.038}px`, fontFamily: fontHindi }}
+                className="font-bold text-slate-900 leading-tight"
               >
                 {cardData.orgNameHi || 'सार्वजनिक नागरिक सेवा'}
               </div>
               <div
-                style={{ fontSize: `${fs * 0.030}px` }}
+                style={{ fontSize: `${fs * 0.030}px`, fontFamily: fontEnglish }}
                 className="font-semibold text-slate-800 tracking-wide"
               >
                 {cardData.orgNameEn || 'Civic Identity Authority (Fictional)'}
@@ -177,7 +179,7 @@ export function CardFace({
             <div style={{ width: `${fs * 0.08}px`, height: `${fs * 0.08}px` }} className="flex items-center justify-center shrink-0">
               <div className="w-full h-full rounded-full bg-red-50 border border-red-300 flex flex-col items-center justify-center p-0.5">
                 <div className="w-6 h-4 bg-gradient-to-b from-orange-500 via-white to-emerald-600 rounded-sm mb-0.5" />
-                <span style={{ fontSize: `${fs * 0.014}px` }} className="font-bold text-red-600 font-devanagari">पहचान</span>
+                <span style={{ fontSize: `${fs * 0.014}px`, fontFamily: fontHindi }} className="font-bold text-red-600">पहचान</span>
               </div>
             </div>
           </div>
@@ -236,13 +238,13 @@ export function CardFace({
               {/* Name in Hindi and English */}
               <div>
                 <div
-                  style={{ fontSize: `${fs * 0.042}px` }}
-                  className="font-bold text-slate-950 font-devanagari leading-snug"
+                  style={{ fontSize: `${fs * 0.042}px`, fontFamily: fontHindi }}
+                  className="font-bold text-slate-950 leading-snug"
                 >
                   {cardData.fullNameHi || 'मंगेश सहानी'}
                 </div>
                 <div
-                  style={{ fontSize: `${fs * 0.036}px` }}
+                  style={{ fontSize: `${fs * 0.036}px`, fontFamily: fontEnglish }}
                   className="font-semibold text-slate-900 leading-snug"
                 >
                   {cardData.fullName || 'Mangesh Sahani'}
@@ -252,30 +254,30 @@ export function CardFace({
               {/* DOB & Gender */}
               <div className="space-y-0.5">
                 <div
-                  style={{ fontSize: `${fs * 0.030}px` }}
+                  style={{ fontSize: `${fs * 0.030}px`, fontFamily: fontHindi }}
                   className="font-semibold text-slate-900"
                 >
-                  जन्म तिथि / DOB: <span className="font-bold">{formattedDob}</span>
+                  जन्म तिथि / <span style={{ fontFamily: fontEnglish }}>DOB:</span> <span className="font-bold" style={{ fontFamily: fontEnglish }}>{formattedDob}</span>
                 </div>
                 <div
-                  style={{ fontSize: `${fs * 0.030}px` }}
+                  style={{ fontSize: `${fs * 0.030}px`, fontFamily: fontHindi }}
                   className="font-semibold text-slate-900"
                 >
-                  लिंग / Gender: <span className="font-bold">{formattedGender}</span>
+                  लिंग / <span style={{ fontFamily: fontEnglish }}>Gender:</span> <span className="font-bold">{formattedGender}</span>
                 </div>
               </div>
 
               {/* Red-Bordered Official-Style Guidance Notice Box */}
               <div className="border border-red-700 rounded p-1.5 bg-red-50/20 space-y-0.5">
                 <p
-                  style={{ fontSize: `${fs * 0.020}px` }}
-                  className="font-bold text-slate-900 font-devanagari leading-relaxed"
+                  style={{ fontSize: `${fs * 0.020}px`, fontFamily: fontHindi }}
+                  className="font-bold text-slate-900 leading-relaxed"
                 >
                   {cardData.noticeTextHi ||
                     'पहचान का प्रमाण है, नागरिकता या जन्मतिथि का नहीं। इसका उपयोग सत्यापन (ऑनलाइन प्रमाणीकरण या क्यूआर कोड स्कैनिंग) के साथ किया जाना चाहिए।'}
                 </p>
                 <p
-                  style={{ fontSize: `${fs * 0.018}px` }}
+                  style={{ fontSize: `${fs * 0.018}px`, fontFamily: fontEnglish }}
                   className="font-medium text-slate-800 leading-relaxed"
                 >
                   {cardData.noticeTextEn ||
@@ -289,7 +291,7 @@ export function CardFace({
           <div className="pt-1.5 border-t border-slate-200 shrink-0">
             {/* 12-Digit Bold Card ID Number */}
             <div
-              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em' }}
+              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em', fontFamily: fontEnglish }}
               className="font-black text-center text-slate-950 leading-none select-all"
             >
               {cardData.cardReferenceNumber || '2078 9828 8141'}
@@ -298,8 +300,8 @@ export function CardFace({
             {/* Red Divider & Slogan */}
             <div className="mt-1.5 pt-1 border-t-2 border-red-600 flex items-center justify-center">
               <span
-                style={{ fontSize: `${fs * 0.032}px` }}
-                className="font-black tracking-wider text-slate-900 font-devanagari text-center"
+                style={{ fontSize: `${fs * 0.032}px`, fontFamily: fontHindi }}
+                className="font-black tracking-wider text-slate-900 text-center"
               >
                 {cardData.slogan || 'मेरा कार्ड, मेरी पहचान'}
               </span>
@@ -312,11 +314,11 @@ export function CardFace({
           {/* Top Enrolment Header */}
           <div className="border-b border-slate-200 pb-1 flex items-center justify-between shrink-0">
             <div
-              style={{ fontSize: `${fs * 0.028}px` }}
-              className="font-bold text-slate-900 font-mono tracking-tight"
+              style={{ fontSize: `${fs * 0.028}px`, fontFamily: fontHindi }}
+              className="font-bold text-slate-900 tracking-tight"
             >
-              नामांकन क्रम / Enrolment No.:{' '}
-              <span className="font-extrabold">{cardData.enrolmentNo || '2906/48436/00676'}</span>
+              नामांकन क्रम / <span style={{ fontFamily: fontEnglish }}>Enrolment No.:</span>{' '}
+              <span className="font-extrabold" style={{ fontFamily: fontEnglish }}>{cardData.enrolmentNo || '2906/48436/00676'}</span>
             </div>
             <span
               style={{ fontSize: `${fs * 0.020}px` }}
@@ -334,7 +336,7 @@ export function CardFace({
             {/* Address Breakdown Column */}
             <div className={`${isVertical ? 'w-full' : 'flex-1'} space-y-1`}>
               <div
-                style={{ fontSize: `${fs * 0.026}px` }}
+                style={{ fontSize: `${fs * 0.026}px`, fontFamily: fontEnglish }}
                 className="font-bold text-slate-800"
               >
                 To
@@ -343,13 +345,13 @@ export function CardFace({
               {/* Recipient Name in Hindi and English */}
               <div className="space-y-0.5">
                 <div
-                  style={{ fontSize: `${fs * 0.032}px` }}
-                  className="font-bold text-slate-950 font-devanagari"
+                  style={{ fontSize: `${fs * 0.032}px`, fontFamily: fontHindi }}
+                  className="font-bold text-slate-950"
                 >
                   {cardData.fullNameHi || 'मंगेश सहानी'}
                 </div>
                 <div
-                  style={{ fontSize: `${fs * 0.030}px` }}
+                  style={{ fontSize: `${fs * 0.030}px`, fontFamily: fontEnglish }}
                   className="font-semibold text-slate-900"
                 >
                   {cardData.fullName || 'Mangesh Sahani'}
@@ -358,7 +360,7 @@ export function CardFace({
 
               {/* Detailed Breakdown Rows */}
               <div
-                style={{ fontSize: `${fs * 0.026}px`, lineHeight: 1.4 }}
+                style={{ fontSize: `${fs * 0.026}px`, lineHeight: 1.4, fontFamily: fontEnglish }}
                 className="font-medium text-slate-900 space-y-0.5"
               >
                 <div>
@@ -422,15 +424,15 @@ export function CardFace({
           {/* Back Bottom: 12-Digit Card ID, VID, and Slogan */}
           <div className="pt-1.5 border-t border-slate-200 shrink-0">
             <div
-              style={{ fontSize: `${fs * 0.028}px` }}
-              className="text-center font-bold text-slate-900 font-devanagari mb-0.5"
+              style={{ fontSize: `${fs * 0.028}px`, fontFamily: fontHindi }}
+              className="text-center font-bold text-slate-900 mb-0.5"
             >
               आपका पहचान क्रमांक / Your ID No. :
             </div>
 
             {/* 12-Digit Bold Card ID */}
             <div
-              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em' }}
+              style={{ fontSize: `${fs * 0.058}px`, letterSpacing: '0.14em', fontFamily: fontEnglish }}
               className="font-black text-center text-slate-950 leading-none select-all"
             >
               {cardData.cardReferenceNumber || '2078 9828 8141'}
@@ -447,8 +449,8 @@ export function CardFace({
             {/* Red Divider & Slogan */}
             <div className="mt-1 pt-1 border-t-2 border-red-600 flex items-center justify-center">
               <span
-                style={{ fontSize: `${fs * 0.032}px` }}
-                className="font-black tracking-wider text-slate-900 font-devanagari text-center"
+                style={{ fontSize: `${fs * 0.032}px`, fontFamily: fontHindi }}
+                className="font-black tracking-wider text-slate-900 text-center"
               >
                 {cardData.slogan || 'मेरा कार्ड, मेरी पहचान'}
               </span>

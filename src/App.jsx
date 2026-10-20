@@ -24,6 +24,8 @@ const DEFAULT_STYLING = {
   bw: 2,
   borderRadius: 12,
   font: '"Noto Sans Devanagari", Inter, Roboto, Arial, sans-serif',
+  fontHindi: '"Noto Sans Devanagari", "Tiro Devanagari Hindi", Mangal, sans-serif',
+  fontEnglish: '"Times New Roman", Georgia, "Roboto Slab", serif',
   textColor: '#0f172a',
   labelColor: '#334155',
   pattern: 'none',

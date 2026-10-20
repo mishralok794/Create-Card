@@ -12,12 +12,30 @@ import {
   RotateCcw
 } from 'lucide-react'
 
+export const HINDI_FONT_OPTIONS = [
+  { name: 'Noto Sans Devanagari (Standard)', value: '"Noto Sans Devanagari", sans-serif' },
+  { name: 'Tiro Devanagari Hindi (Classic)', value: '"Tiro Devanagari Hindi", serif' },
+  { name: 'Martel (Bold Devanagari)', value: 'Martel, serif' },
+  { name: 'Mangal (System)', value: 'Mangal, "Noto Sans Devanagari", sans-serif' }
+]
+
+export const ENGLISH_FONT_OPTIONS = [
+  { name: 'Times New Roman (Formal Serif)', value: '"Times New Roman", Georgia, serif' },
+  { name: 'Roboto Slab (Modern Serif)', value: '"Roboto Slab", Georgia, serif' },
+  { name: 'Georgia (Classic Serif)', value: 'Georgia, "Times New Roman", serif' },
+  { name: 'Inter (Modern Sans)', value: 'Inter, system-ui, sans-serif' },
+  { name: 'Roboto (Clean Sans)', value: 'Roboto, Arial, sans-serif' },
+  { name: 'Outfit (Stylish Sans)', value: 'Outfit, sans-serif' },
+  { name: 'Arial / System (Classic)', value: 'Arial, Helvetica, sans-serif' }
+]
+
+// Legacy combined options (for toolbar general font selector)
 export const FONT_OPTIONS = [
-  { name: 'Noto Sans Devanagari + Inter (Clean Standard)', value: '"Noto Sans Devanagari", Inter, Roboto, Arial, sans-serif' },
-  { name: 'Inter (Modern Standard)', value: 'Inter, system-ui, sans-serif' },
-  { name: 'Roboto (Clean Document)', value: 'Roboto, Arial, sans-serif' },
+  { name: 'Noto Sans Devanagari + Inter', value: '"Noto Sans Devanagari", Inter, Roboto, Arial, sans-serif' },
+  { name: 'Inter (Modern)', value: 'Inter, system-ui, sans-serif' },
+  { name: 'Roboto (Clean)', value: 'Roboto, Arial, sans-serif' },
   { name: 'Outfit (Modern Sans)', value: 'Outfit, sans-serif' },
-  { name: 'JetBrains Mono (Monospace)', value: '"JetBrains Mono", monospace' }
+  { name: 'JetBrains Mono', value: '"JetBrains Mono", monospace' }
 ]
 
 
@@ -208,9 +226,41 @@ export default function CardEditor({ cardStyling, setCardStyling, onResetStyling
           <span>Typography & Alignment</span>
         </label>
 
-        {/* Font Family */}
+        {/* Hindi Font Family */}
         <div>
-          <span className="block text-xs text-slate-400 mb-1">Card Font Family:</span>
+          <span className="block text-xs text-slate-400 mb-1">हिंदी फॉन्ट (Hindi / Devanagari):</span>
+          <select
+            value={cardStyling.fontHindi || HINDI_FONT_OPTIONS[0].value}
+            onChange={(e) => updateStyle('fontHindi', e.target.value)}
+            className="w-full bg-slate-900 text-slate-100 text-xs rounded-lg border border-slate-700 px-3 py-2 focus:outline-none focus:border-indigo-500"
+          >
+            {HINDI_FONT_OPTIONS.map((f, i) => (
+              <option key={i} value={f.value}>
+                {f.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* English Font Family */}
+        <div>
+          <span className="block text-xs text-slate-400 mb-1">English Font:</span>
+          <select
+            value={cardStyling.fontEnglish || ENGLISH_FONT_OPTIONS[0].value}
+            onChange={(e) => updateStyle('fontEnglish', e.target.value)}
+            className="w-full bg-slate-900 text-slate-100 text-xs rounded-lg border border-slate-700 px-3 py-2 focus:outline-none focus:border-indigo-500"
+          >
+            {ENGLISH_FONT_OPTIONS.map((f, i) => (
+              <option key={i} value={f.value}>
+                {f.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* General / Fallback Font */}
+        <div>
+          <span className="block text-xs text-slate-400 mb-1">General / Fallback Font:</span>
           <select
             value={cardStyling.font || FONT_OPTIONS[0].value}
             onChange={(e) => updateStyle('font', e.target.value)}
